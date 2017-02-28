@@ -37,10 +37,6 @@ class App extends Component {
     });
   }
 
-  getNamesFromResponse(arr) {
-    return arr.map((result) => (result.name));
-  }
-
   getSearchResults(id) {
     if (id === 'f1sb') {
       let x = document.getElementById(id).value || "";
@@ -61,14 +57,20 @@ class App extends Component {
     }
   }
 
-  selectedItem(selectedFood, number) {
+  selectedItem(selectedFood, ndbno, number) {
     console.log('Selected Food Is', selectedFood);
     if (number === '1')
-      this.setState({selectedFood1: selectedFood}, function(){
+      this.setState({
+        selectedFood1Name: selectedFood,
+        selectedFood1NdbNo: ndbno
+      }, function(){
         console.log(this.state);
       });
     else if (number === '2')
-      this.setState({selectedFood2: selectedFood}, function(){
+      this.setState({
+        selectedFood2Name: selectedFood,
+        selectedFood2NdbNo: ndbno
+      }, function(){
         console.log(this.state);
       });
   }
@@ -102,10 +104,10 @@ class App extends Component {
               selectionHandler={this.selectedItem}
               reference={this}
               listNumber='1'
-              foodList={this.getNamesFromResponse(this.state.foodList1)} />
+              foodList={this.state.foodList1} />
 
             <div className="SelectedFoodName">
-              {this.state.selectedFood1}
+              {this.state.selectedFood1Name}
             </div>
           </div>
 
@@ -122,10 +124,10 @@ class App extends Component {
               selectionHandler={this.selectedItem}
               reference={this}
               listNumber='2'
-              foodList={this.getNamesFromResponse(this.state.foodList2)} />
+              foodList={this.state.foodList2} />
 
             <div className="SelectedFoodName">
-              {this.state.selectedFood2}
+              {this.state.selectedFood2Name}
             </div>
           </div>
 
@@ -146,7 +148,7 @@ class List extends Component {
             <a
               className="SearchOption"
               key={index}
-              onClick={this.props.selectionHandler.bind(this.props.reference, value, this.props.listNumber)}>{value}
+              onClick={this.props.selectionHandler.bind(this.props.reference, value.name, value.ndbno ,this.props.listNumber)}>{value.name}
             </a>
           ))
         }
