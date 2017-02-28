@@ -83,6 +83,7 @@ class App extends Component {
               <input
                 type="text"
                 id="f1sb"
+                className="FoodInput"
                 onKeyUp={this.getSearchResults.bind(this, 'f1sb')} />
             </form>
             <List
@@ -95,6 +96,7 @@ class App extends Component {
               <input
                 type="text"
                 id="f2sb"
+                className="FoodInput"
                 onKeyUp={this.getSearchResults.bind(this, 'f2sb')} />
             </form>
             <List
@@ -111,11 +113,11 @@ class List extends Component {
   render() {
     let data = this.props.foodList;
     return (
-      <ul>
+      <div>
         {
-          data.map((value, index) => (<li key={index}><button>{value}</button></li>))
+          data.map((value, index) => (<a className="SearchOption" key={index}>{value}</a>))
         }
-      </ul>
+      </div>
     );
   }
 }

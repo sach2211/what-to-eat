@@ -28,6 +28,18 @@
   max-width: 45%;
 }
 
+.SearchOption {
+  display: inline-block;
+  width: 70%;
+  background-color: rgba(0, 41, 255, 0.14);
+  border: 1px solid black;
+  font-size: small;
+}
+
+.FoodInput {
+  width: 70%;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
