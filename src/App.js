@@ -61,6 +61,18 @@ class App extends Component {
     }
   }
 
+  selectedItem(selectedFood, number) {
+    console.log('Selected Food Is', selectedFood);
+    if (number === '1')
+      this.setState({selectedFood1: selectedFood}, function(){
+        console.log(this.state);
+      });
+    else if (number === '2')
+      this.setState({selectedFood2: selectedFood}, function(){
+        console.log(this.state);
+      });
+  }
+
   render() {
 
     return (
@@ -87,7 +99,14 @@ class App extends Component {
                 onKeyUp={this.getSearchResults.bind(this, 'f1sb')} />
             </form>
             <List
+              selectionHandler={this.selectedItem}
+              reference={this}
+              listNumber='1'
               foodList={this.getNamesFromResponse(this.state.foodList1)} />
+
+            <div className="SelectedFoodName">
+              {this.state.selectedFood1}
+            </div>
           </div>
 
           <div  className="FoodList">
@@ -100,7 +119,14 @@ class App extends Component {
                 onKeyUp={this.getSearchResults.bind(this, 'f2sb')} />
             </form>
             <List
+              selectionHandler={this.selectedItem}
+              reference={this}
+              listNumber='2'
               foodList={this.getNamesFromResponse(this.state.foodList2)} />
+
+            <div className="SelectedFoodName">
+              {this.state.selectedFood2}
+            </div>
           </div>
 
         </div>
@@ -110,12 +136,19 @@ class App extends Component {
 }
 
 class List extends Component {
+
   render() {
     let data = this.props.foodList;
     return (
       <div>
         {
-          data.map((value, index) => (<a className="SearchOption" key={index}>{value}</a>))
+          data.map((value, index) => (
+            <a
+              className="SearchOption"
+              key={index}
+              onClick={this.props.selectionHandler.bind(this.props.reference, value, this.props.listNumber)}>{value}
+            </a>
+          ))
         }
       </div>
     );
