@@ -1,5 +1,6 @@
 {
   "name": "what-to-eat",
+  "homepage": "https://sach2211.github.io/what-to-eat",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
