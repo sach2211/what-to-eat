@@ -9,7 +9,10 @@ class App extends Component {
     this.state = {
       foodList1: [],
       foodList2: [],
-      queryString: ""
+      nutriData1: [],
+      nutriData2: [],
+      queryString1: "",
+      queryString2: "",
     }
   }
 
@@ -56,7 +59,30 @@ class App extends Component {
       }
     }
   }
+  getNutriFacts(ndbno, number) {
+    // 2 apis can be used
+    // Using : https://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=DEMO_KEY&nutrients=205&nutrients=204&ndbno=21263
+    // Instead of : https://api.nal.usda.gov/ndb/reports/?ndbno=21473&type=b&format=json&api_key=DEMO_KEY
 
+    // Nutrient Codes
+    // 203 => protien
+    // 291 => fibre
+    // 606 => saturated fats
+    // 601 => cholestrol
+    var self = this;
+    request
+    .get('https://api.nal.usda.gov/ndb/nutrients/?nutrients=203&nutrients=291&nutrients=601&nutrients=606')
+    .query({ndbno: ndbno, format: 'json', api_key: 'XCa9uB1lcp32KBK0ItR3IBrFRKWTvQhIdBJz7g67'})
+    .end(function (err, response){
+      if (err || !response.body) {
+        console.error('Some error occured, please refresh the page');
+      }
+      if (number === '1')
+        self.setState({ nutriData1: response.body.report.foods[0].nutrients });
+      else if (number === '2')
+        self.setState({ nutriData2: response.body.report.foods[0].nutrients });
+    });
+  }
   selectedItem(selectedFood, ndbno, number) {
     console.log('Selected Food Is', selectedFood);
     if (number === '1')
@@ -64,14 +90,16 @@ class App extends Component {
         selectedFood1Name: selectedFood,
         selectedFood1NdbNo: ndbno
       }, function(){
-        console.log(this.state);
+        // console.log(this.state);
+        this.getNutriFacts(ndbno, number);
       });
     else if (number === '2')
       this.setState({
         selectedFood2Name: selectedFood,
         selectedFood2NdbNo: ndbno
       }, function(){
-        console.log(this.state);
+        // console.log(this.state);
+        this.getNutriFacts(ndbno, number);
       });
   }
 
@@ -109,6 +137,17 @@ class App extends Component {
             <div className="SelectedFoodName">
               {this.state.selectedFood1Name}
             </div>
+
+            <div>
+            {
+              this.state.nutriData1.map((value, index) => (
+                <div key={index} className={value.nutrient_id === '291' || value.nutrient_id === '203' ? 'GoodNutri' : 'BadNutri'}>
+                  <div className="Nutrient_Name">{value.nutrient}</div>
+                  <div className="Nutrient_Value">{value.gm}</div>
+                </div>
+              ))
+            }
+            </div>
           </div>
 
           <div  className="FoodList">
@@ -128,6 +167,17 @@ class App extends Component {
 
             <div className="SelectedFoodName">
               {this.state.selectedFood2Name}
+            </div>
+
+            <div>
+            {
+              this.state.nutriData2.map((value, index) => (
+                <div key={index} className={value.nutrient_id === '291' || value.nutrient_id === '203' ? 'GoodNutri' : 'BadNutri'}>
+                  <div className="Nutrient_Name">{value.nutrient}</div>
+                  <div className="Nutrient_Value">{value.gm}</div>
+                </div>
+              ))
+            }
             </div>
           </div>
 
